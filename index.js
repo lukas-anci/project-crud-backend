@@ -6,12 +6,9 @@ const app = express();
 const PORT = 4000;
 // middleware
 app.use(morgan('dev'));
+app.use(express.json());
 
 const mongoose = require('mongoose');
-
-app.get('/', (req, res) => {
-  res.status(200).send('server works');
-});
 
 mongoose
   .connect(process.env.MONGO_CONNECT_STRING, {
@@ -22,5 +19,13 @@ mongoose
     console.log('Conneced to Mongoose');
   })
   .catch((err) => console.error(err.message));
+
+app.get('/', (req, res) => {
+  res.status(200).send('server works');
+});
+
+app.post('/api/shop/categories/new', (req, res) => {
+  res.json('this is categories api to create');
+});
 
 app.listen(PORT, () => console.log(`server running on port ${PORT}`));
