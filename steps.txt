@@ -1,0 +1,9 @@
+1. npm init
+2. git init
+3. github
+4. install express, morgan, 
+5. pasikurt serveri port 4000
+6. pasikurti viena get route kuriam pagrazinam "serveris veikia"
+7. instaliuoti mongoose
+8. susikurti nauja duomenu baze(pakeisti prisijungimo stringe)
+9. pasikurti modeli kategorijom
