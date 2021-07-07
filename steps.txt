@@ -1,9 +1,23 @@
-1. npm init
-2. git init
-3. github
-4. install express, morgan, 
-5. pasikurt serveri port 4000
-6. pasikurti viena get route kuriam pagrazinam "serveris veikia"
+1. inicijuoti npm
+
+2. inicijuoti git
+
+3. prisideti github
+
+4. isiinstaliuoti express, morgan
+
+5. pasikurti serveri port 4000
+
+6. pasikurti viena get route kuriame pagrazinam "Serveris veikia "
+
 7. instaliuoti mongoose
-8. susikurti nauja duomenu baze(pakeisti prisijungimo stringe)
-9. pasikurti modeli kategorijom
+
+8. susikurti nauja duomenu baze (pakeisti prisijungimo stringe)
+
+9. pasikurti modeli categorijom 
+
+10. susiinstaliuoti dotenv 
+
+11. susikurti .env ir .env.sample failus, patalpinti prisijungimo strintga .env ir panaudoti ji prisijungimui
+
+12. pakurti post routa 'api/shop/categories/new' kuris priima title stringa ir prideda ji kaip kategorija
