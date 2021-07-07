@@ -6,9 +6,11 @@ const app = express();
 const PORT = 4000;
 // middleware
 app.use(morgan('dev'));
+// leidzia req body gauti kaip json
 app.use(express.json());
 
 const mongoose = require('mongoose');
+const ShopCategory = require('./src/models/shopCategory');
 
 mongoose
   .connect(process.env.MONGO_CONNECT_STRING, {
@@ -25,7 +27,17 @@ app.get('/', (req, res) => {
 });
 
 app.post('/api/shop/categories/new', (req, res) => {
-  res.json('this is categories api to create');
+  // get user title
+  console.log(req.body);
+  const titleFromUser = req.body.title;
+  if (!titleFromUser) return res.status(400).json('no title');
+
+  // get title, create new category
+  const newCat = new ShopCategory({ title: titleFromUser });
+  newCat
+    .save()
+    .then((result) => res.json(['category created', result]))
+    .catch((err) => res.status(500).json('internal error'));
 });
 
 app.listen(PORT, () => console.log(`server running on port ${PORT}`));

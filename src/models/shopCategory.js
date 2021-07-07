@@ -10,5 +10,5 @@ const shopCatSchema = new Schema(
   },
   { timestamps: true }
 );
-const ShopCategory = mongoose.model('post', shopCatSchema);
-module.exports = shopCatSchema;
+const ShopCategory = mongoose.model('shopcategories', shopCatSchema);
+module.exports = ShopCategory;
