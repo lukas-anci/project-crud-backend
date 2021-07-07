@@ -8,3 +8,7 @@ Content-Type: application/json
 {
     "title":"Jacket"
 }
+
+### get all categories
+
+GET http://localhost:4000/api/shop/categories

@@ -26,18 +26,9 @@ app.get('/', (req, res) => {
   res.status(200).send('server works');
 });
 
-app.post('/api/shop/categories/new', (req, res) => {
-  // get user title
-  console.log(req.body);
-  const titleFromUser = req.body.title;
-  if (!titleFromUser) return res.status(400).json('no title');
+// routes
 
-  // get title, create new category
-  const newCat = new ShopCategory({ title: titleFromUser });
-  newCat
-    .save()
-    .then((result) => res.json(['category created', result]))
-    .catch((err) => res.status(500).json('internal error'));
-});
+const catRoutes = require('./routes/catRoutes');
+app.use('/', catRoutes);
 
 app.listen(PORT, () => console.log(`server running on port ${PORT}`));
