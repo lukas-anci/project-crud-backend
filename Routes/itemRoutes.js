@@ -3,8 +3,6 @@ const shopItem = require('../src/models/shopItem');
 const router = express.Router();
 
 // create new item
-
-// sukurti nauja item
 router.post('/api/shop/items/new', (req, res) => {
   console.log(req.body);
 
@@ -32,7 +30,16 @@ router.post('/api/shop/items/new', (req, res) => {
     .catch((err) => res.json(err));
 });
 
-// gauti visus items
+// get all items
+
+router.get('/api/shop/items', async (req, res) => {
+  try {
+    const items = await shopItem.find();
+    res.json(items);
+  } catch (err) {
+    res.status(500).json('internal error');
+  }
+});
 
 // gauti single item
 module.exports = router;
