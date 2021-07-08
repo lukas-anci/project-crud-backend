@@ -9,19 +9,20 @@ router.post('/api/shop/items/new', (req, res) => {
   console.log(req.body);
 
   const newItemData = {
-    title: 'Feather Slim Fit Denim Jeans',
-    price: 1299.95,
-    salePrice: 99.99,
-    image: 'denim_01_',
-    color: 'indigo',
+    title: 'Autumn best',
+    price: 99.99,
+
+    image: 'foot_autumn_01_',
+    color: 'green',
+    size: 'normal',
     sizeQty: [
-      { size: 'small', quantity: 7 },
-      { size: 'medium', quantity: 7 },
-      { size: 'large', quantity: 7 },
+      { size: 'small', quantity: 3 },
+      { size: 'medium', quantity: 3 },
+      { size: 'large', quantity: 3 },
     ],
-    images: [1, 2, 3],
-    sku: '01',
-    category: '60e593b4a7aa681d4846ad9b',
+    images: [1, 2, 3, 4],
+    sku: 'autumn_01',
+    category: '60e593ada7aa681d4846ad99',
   };
   const newItem = new shopItem(newItemData);
 
