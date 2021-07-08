@@ -10,7 +10,6 @@ app.use(morgan('dev'));
 app.use(express.json());
 
 const mongoose = require('mongoose');
-const ShopCategory = require('./src/models/shopCategory');
 
 mongoose
   .connect(process.env.MONGO_CONNECT_STRING, {
@@ -29,6 +28,8 @@ app.get('/', (req, res) => {
 // routes
 
 const catRoutes = require('./routes/catRoutes');
+const itemRoutes = require('./routes/itemRoutes');
 app.use('/', catRoutes);
+app.use('/', itemRoutes);
 
 app.listen(PORT, () => console.log(`server running on port ${PORT}`));

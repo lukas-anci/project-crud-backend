@@ -1,0 +1,7 @@
+// kuriam nauja resursa
+
+1. sukuriam modeli
+
+2. sukuriam route faila, ir jame aprasom routes
+
+3. itraukti nauja route faila i index.js

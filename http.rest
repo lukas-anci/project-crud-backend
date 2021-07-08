@@ -12,3 +12,11 @@ Content-Type: application/json
 ### get all categories
 
 GET http://localhost:4000/api/shop/categories
+
+### add new item
+POST http://localhost:4000/api/shop/items/new
+Content-Type: application/json
+
+{
+    "title":"green hat"
+}
