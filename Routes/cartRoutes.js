@@ -15,13 +15,29 @@ router.post('/api/shop/cart/:userId', async (req, res) => {
   console.log(req.body);
 
   try {
+    // if cart exists
+    const currentCart = await Cart.findOne({
+      userId: req.params.userId,
+    }).exec();
+    console.log('currentCart', Boolean(currentCart));
+
     // jei jau yra toks cart tai mes norim prideti prie cart objektu
-    const cartExists = Cart.findOne({ userId: req.params.userId });
-    console.log('cartExists', cartExists.mongooseCollection.name);
-    // jei nera tai sukurti nauja
-    const newCart = new Cart({ userId: req.params.userId, cart: [req.body] });
-    const result = await newCart.save();
-    res.json(result);
+
+    if (!currentCart) {
+      const newCart = new Cart({ userId: req.params.userId, cart: [req.body] });
+      const result = await newCart.save();
+      res.json({ msg: 'cart created', result });
+    } else {
+      // count nelygu nuliui cartas siam vartotojui egzistuoja norim prideti i carta
+      const currentCartArr = currentCart.cart;
+      currentCartArr.push(req.body);
+      await Cart.updateOne(
+        { userId: req.params.userId },
+        { cart: currentCartArr }
+      );
+      res.json({ msg: 'now in cart', currentCart });
+    }
+    // res.json('testing');
   } catch (err) {
     res.json(err);
   }
