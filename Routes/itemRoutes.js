@@ -7,19 +7,20 @@ router.post('/api/shop/items/new', (req, res) => {
   console.log(req.body);
 
   const newItemData = {
-    title: 'Autumn best',
+    title: 'Green hat',
     price: 99.99,
+    salePrice: 49.9,
 
-    image: 'foot_autumn_01_',
+    image: 'acc_hat_01_',
     color: 'green',
-    size: 'normal',
+
     sizeQty: [
-      { size: 'small', quantity: 3 },
-      { size: 'medium', quantity: 3 },
-      { size: 'large', quantity: 3 },
+      { size: 'small', quantity: 10 },
+      { size: 'medium', quantity: 10 },
+      { size: 'large', quantity: 10 },
     ],
-    images: [1, 2, 3, 4],
-    sku: 'autumn_01',
+    images: [1, 2, 3, 4, 5],
+    sku: 'hat_01',
     category: '60e593ada7aa681d4846ad99',
   };
   const newItem = new shopItem(newItemData);
@@ -34,12 +35,21 @@ router.post('/api/shop/items/new', (req, res) => {
 
 router.get('/api/shop/items', async (req, res) => {
   try {
-    const items = await shopItem.find();
+    const items = await shopItem.find().populate('category');
     res.json(items);
   } catch (err) {
-    res.status(500).json('internal error');
+    res.status(500).json(err);
   }
 });
 
 // gauti single item
+
+router.get('/api/shop/items/:id', async (req, res) => {
+  try {
+    const item = await shopItem.findById(req.params.id).populate('category');
+    res.json(item);
+  } catch (err) {
+    res.status(500).json(err);
+  }
+});
 module.exports = router;
