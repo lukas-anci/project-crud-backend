@@ -1,7 +1,23 @@
 const express = require('express');
 const Cart = require('../src/models/cart');
+const shopItem = require('../src/models/shopItem');
 const router = express.Router();
 
+// get count of carts of a user
+router.get('/api/shop/cart/count/:userId', async (req, res) => {
+  console.log('kkk');
+  const allCarts = await Cart.find();
+  console.log('userIds', req.params.userId);
+  console.log('allcarts', allCarts);
+  const currentUserCart = await allCarts.find(
+    (u) => u.userId == req.params.userId
+  );
+  console.log('kkk2', currentUserCart.cart.length);
+
+  // const findCart = newCart.filter((i) => i.quantity === quantity);
+
+  res.json(currentUserCart.cart.length);
+});
 // get user cart
 
 router.get('/api/shop/cart/:userId', async (req, res) => {
@@ -11,7 +27,19 @@ router.get('/api/shop/cart/:userId', async (req, res) => {
     const allCarts = await Cart.find();
     // find current user cart
     const currentUserCart = allCarts.find((u) => u.userId == req.params.userId);
-    res.json(currentUserCart.cart);
+    // truksta title, image
+    // gauti itema pagal id
+
+    const fullDetailsCartItem = currentUserCart.map((cartItem) => {
+      // surandam konkretu itema pagal id
+      const currentItem = shopItem.findById(cartItem.itemId);
+      console.log('currentItem', currentItem);
+      return {
+        ...cartItem,
+        title: currentItem.title,
+      };
+    });
+    res.json(fullDetailsCartItem);
   } catch (err) {
     res.json(err);
   }
