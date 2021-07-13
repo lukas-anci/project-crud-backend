@@ -57,9 +57,8 @@ router.post('/api/shop/cart/:userId', async (req, res) => {
     console.log(' currentCart', Boolean(currentCart));
     // jei jau yra toks cart tai mes norim prideti prie cart objektu
     if (!currentCart) {
-      const newCart = new Cart({ userId: req.params.userId, cart: [req.body] });
-      const result = await newCart.save();
-      res.json({ msg: 'created a cart', result });
+      const newCart = await createNewCart(req.params.userId, req.body);
+      res.json({ msg: 'created a cart', newCart: newCart });
     } else {
       // count nelygu nuliui cartas siam vartotojui egzistuoja norim prideti i cart
       // currentCartArr esamas krepselis dv
@@ -89,4 +88,10 @@ router.post('/api/shop/cart/:userId', async (req, res) => {
   }
 });
 
+// helper functions
+async function createNewCart(userId, body) {
+  const newCart = new Cart({ userId: userId, cart: [body] });
+  await newCart.save();
+  return newCart.cart;
+}
 module.exports = router;
