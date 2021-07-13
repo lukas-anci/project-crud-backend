@@ -5,18 +5,20 @@ const router = express.Router();
 
 // get count of carts of a user
 router.get('/api/shop/cart/count/:userId', async (req, res) => {
-  console.log('kkk');
+  // console.log('kkk');
   const allCarts = await Cart.find();
   console.log('userIds', req.params.userId);
   console.log('allcarts', allCarts);
   const currentUserCart = await allCarts.find(
     (u) => u.userId == req.params.userId
   );
-  console.log('kkk2', currentUserCart.cart.length);
+  // console.log('kkk2', currentUserCart);
 
-  // const findCart = newCart.filter((i) => i.quantity === quantity);
-
-  res.json(currentUserCart.cart.length);
+  // currentUserCartObj = Cart.findOne({ userId: req.params.userId });
+  if (currentUserCart && currentUserCart.cart) {
+    return res.json(currentUserCart.cart.length);
+  }
+  res.status(200).json(0);
 });
 // get user cart
 
