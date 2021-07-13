@@ -53,6 +53,7 @@ router.post('/api/shop/cart/:userId', async (req, res) => {
     console.log(' currentCart', Boolean(currentCart));
     // jei jau yra toks cart tai mes norim prideti prie cart objektu
     if (!currentCart) {
+      console.log('newcart');
       const newCart = await createNewCart(req.params.userId, req.body);
       res.json({ msg: 'created a cart', newCart: newCart });
     } else {
@@ -62,7 +63,7 @@ router.post('/api/shop/cart/:userId', async (req, res) => {
       const currentCartArr = currentCart.cart;
 
       increaseQtyOrAddNewItem(
-        isItemVariantInCartAlready(currentCartArr),
+        isItemVariantInCartAlready(currentCartArr, req.body),
         currentCartArr,
         req.body
       );
@@ -96,9 +97,9 @@ function increaseQtyOrAddNewItem(isItemInCartAlready, currentCartArr, body) {
   }
 }
 
-function isItemVariantInCartAlready(ccurrentCartArr) {
+function isItemVariantInCartAlready(currentCartArr, body) {
   return currentCartArr.find(
-    (ci) => ci.itemId == req.body.itemId && ci.size === req.body.size
+    (ci) => ci.itemId == body.itemId && ci.size === body.size
   );
 }
 
