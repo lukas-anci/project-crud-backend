@@ -6,42 +6,37 @@ const router = express.Router();
 // get count of carts of a user
 router.get('/api/shop/cart/count/:userId', async (req, res) => {
   // console.log('kkk');
-  const allCarts = await Cart.find();
-  console.log('userIds', req.params.userId);
-  console.log('allcarts', allCarts);
-  const currentUserCart = await allCarts.find(
-    (u) => u.userId == req.params.userId
-  );
-  // console.log('kkk2', currentUserCart);
+  try {
+    const allCarts = await Cart.find();
+    console.log('userIds', req.params.userId);
+    console.log('allcarts', allCarts);
+    const currentUserCart = await allCarts.find(
+      (u) => u.userId == req.params.userId
+    );
+    // console.log('kkk2', currentUserCart);
 
-  // currentUserCartObj = Cart.findOne({ userId: req.params.userId });
-  if (currentUserCart && currentUserCart.cart) {
-    return res.json(currentUserCart.cart.length);
+    // currentUserCartObj = Cart.findOne({ userId: req.params.userId });
+    if (currentUserCart && currentUserCart.cart) {
+      return res.json(currentUserCart.cart.length);
+    }
+    res.status(200).json(0);
+  } catch (err) {
+    res.json(err);
   }
-  res.status(200).json(0);
 });
 // get user cart
 
 router.get('/api/shop/cart/:userId', async (req, res) => {
-  // res.json(`You want to get cart of a user ${req.params.userId}`);
-
+  console.log('get user cart function ran');
+  // res.json(`You want to get cart of a user ${}`);
   try {
+    // we find all carts of all users
     const allCarts = await Cart.find();
+    console.log(allCarts);
     // find current user cart
     const currentUserCart = allCarts.find((u) => u.userId == req.params.userId);
-    // truksta title, image
-    // gauti itema pagal id
 
-    const fullDetailsCartItem = currentUserCart.map((cartItem) => {
-      // surandam konkretu itema pagal id
-      const currentItem = shopItem.findById(cartItem.itemId);
-      console.log('currentItem', currentItem);
-      return {
-        ...cartItem,
-        title: currentItem.title,
-      };
-    });
-    res.json(fullDetailsCartItem);
+    res.json(currentUserCart.cart);
   } catch (err) {
     res.json(err);
   }
