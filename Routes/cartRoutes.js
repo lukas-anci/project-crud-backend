@@ -45,12 +45,17 @@ router.get('/api/shop/cart/:userId', async (req, res) => {
 // add item to cart
 
 router.post('/api/shop/cart/:userId', async (req, res) => {
+  console.log('add to cart route');
+  console.log(req.body);
+  res.status(200).json();
+  return;
+
   try {
     // ar toks krepselis existuoja
     const currentCart = await Cart.findOne({
       userId: req.params.userId,
     }).exec();
-    console.log(' currentCart', Boolean(currentCart));
+    console.log(' currentCart', currentCart);
     // jei jau yra toks cart tai mes norim prideti prie cart objektu
     if (!currentCart) {
       console.log('newcart');
@@ -101,6 +106,32 @@ function isItemVariantInCartAlready(currentCartArr, body) {
   return currentCartArr.find(
     (ci) => ci.itemId == body.itemId && ci.size === body.size
   );
+}
+
+function shopItemToCart() {
+  // shop item
+  // {
+  //   images: [ 1, 2, 3, 4, 5 ],
+  //   _id: '60ee78f41b369e54289c231b',
+  //   title: 'Green hat',
+  //   price: 99.99,
+  //   salePrice: 49.9,
+  //   image: 'acc_hat_01_',
+  //   color: 'green',
+  //   size: 'small',
+  //   quantity: 10,
+  //   sku: 'hat_01',
+  //   category: {
+  //     _id: '60e593ada7aa681d4846ad99',
+  //     title: 'Accessories',
+  //     createdAt: '2021-07-07T11:44:45.193Z',
+  //     updatedAt: '2021-07-07T11:44:45.193Z',
+  //     __v: 0
+  //   },
+  //   createdAt: '2021-07-14T05:41:08.373Z',
+  //   updatedAt: '2021-07-14T05:41:08.373Z',
+  //   __v: 0
+  // }
 }
 
 module.exports = router;

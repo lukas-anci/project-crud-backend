@@ -7,7 +7,7 @@ const newItemData = require('../src/models/stock');
 router.post('/api/shop/items/new', (req, res) => {
   console.log(req.body);
 
-  const newItem = new shopItem(newItemData[0]);
+  const newItem = new shopItem(newItemData[4]);
 
   newItem
     .save()

@@ -29,7 +29,10 @@ const cartSchema = new Schema(
           ref: 'shopItem',
           required: true,
         },
-        quantity: reqNumber,
+        quantity: {
+          type: Number,
+          default: 1,
+        },
       },
     ],
   },
