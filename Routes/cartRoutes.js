@@ -42,6 +42,39 @@ router.get('/api/shop/cart/:userId', async (req, res) => {
   }
 });
 
+// create update cart quantity PUT route /api/shop/cart/:userId
+// gauti atsakyma json pavidalu req.body arba isloginti req.body
+
+router.put('/api/shop/cart/:userId', async (req, res) => {
+  // res.json(req.body);
+
+  console.log('req.body', req.body);
+  console.log(`cart id: ${req.body.cartItemId}`);
+
+  const userId = req.params.userId;
+  const { cartItemId, newQty } = req.body;
+
+  // susirasti cart pagal userId
+  const foundCartObj = await Cart.findOne({ userId }).exec();
+  console.log('foundCartObj', foundCartObj.cart);
+
+  // paieskoti carte item pagal cartId
+
+  const foundCartItemToBeUpdated = foundCartObj.cart.find(
+    ({ _id }) => _id == cartItemId
+  );
+  console.log('foundCartItemToBeUpdated', foundCartItemToBeUpdated);
+  foundCartItemToBeUpdated.quantity = newQty;
+  // autnaujinti kieki to itemo pagal newQty
+
+  // const saveResult = await foundCartObj.save();
+  foundCartObj.save((error, saveResult) => {
+    if (error) console.log('error', error);
+    console.log('saveResult', saveResult);
+    res.json({ msg: 'atnaujinimas in progreess', saveResult });
+  });
+});
+
 // add item to cart
 
 router.post('/api/shop/cart/:userId', async (req, res) => {
@@ -74,11 +107,13 @@ router.post('/api/shop/cart/:userId', async (req, res) => {
         currentCartArr,
         req.body
       );
-
       await Cart.updateOne(
         { userId: req.params.userId },
         { cart: currentCartArr }
       );
+      // sumazinam item quantity kuris buvo nupirktas
+
+      updateShopItemStock(req.body._id, -1);
       res.json({ msg: 'add item to cart', currentCart });
     }
 
@@ -89,6 +124,12 @@ router.post('/api/shop/cart/:userId', async (req, res) => {
 });
 
 // helper functions
+
+async function updateShopItemStock(shopItemId, difference) {
+  console.log('updateShopItemStock');
+  console.log({ shopItemId, difference });
+}
+
 async function createNewCart(userId, body) {
   const newCart = new Cart({ userId: userId, cart: [shopItemToCart(body)] });
 
@@ -152,8 +193,7 @@ function shopItemToCart(shopItem) {
   return {
     title,
     image,
-    price,
-    salePrice,
+    price: salePrice || price,
     color,
     size,
     sku,
