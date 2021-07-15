@@ -113,7 +113,7 @@ router.post('/api/shop/cart/:userId', async (req, res) => {
       );
       // sumazinam item quantity kuris buvo nupirktas
 
-      updateShopItemStock(req.body._id, -1);
+      await updateShopItemStock(req.body._id, req.body.quantity - 1);
       res.json({ msg: 'add item to cart', currentCart });
     }
 
@@ -125,9 +125,13 @@ router.post('/api/shop/cart/:userId', async (req, res) => {
 
 // helper functions
 
-async function updateShopItemStock(shopItemId, difference) {
-  console.log('updateShopItemStock');
-  console.log({ shopItemId, difference });
+async function updateShopItemStock(shopItemId, newQty) {
+  // get how many items in stock
+  // naudojam shopItem moedl, surast ir atnaujinti shopItemo kurio id yra shop item id
+  // kieki/stock i ta reiksme kuria gaunam kaip newQty
+  await shopItem.findByIdAndUpdate(shopItemId, {
+    quantity: newQty,
+  });
 }
 
 async function createNewCart(userId, body) {
