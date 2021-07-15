@@ -96,6 +96,7 @@ router.post('/api/shop/cart/:userId', async (req, res) => {
     if (!currentCart) {
       // console.log('newcart');
       const newCart = await createNewCart(req.params.userId, req.body);
+      await updateShopItemStock(req.body._id, req.body.quantity - 1);
       res.json({ msg: 'created a cart', newCart: newCart });
     } else {
       // vartotojas jau turi krepseli
@@ -129,9 +130,16 @@ async function updateShopItemStock(shopItemId, newQty) {
   // get how many items in stock
   // naudojam shopItem moedl, surast ir atnaujinti shopItemo kurio id yra shop item id
   // kieki/stock i ta reiksme kuria gaunam kaip newQty
-  await shopItem.findByIdAndUpdate(shopItemId, {
-    quantity: newQty,
-  });
+  // const updateResult = await shopItem
+  //   .findByIdAndUpdate(shopItemId, {
+  //     quantity: newQty,
+  //   })
+  //   .exec();
+  const currentShopItem = await shopItem.findById(shopItemId);
+  currentShopItem.quantity = newQty;
+  const updateResult = await currentShopItem.save();
+  console.log('updateResult', updateResult);
+  console.log('currentShopItem', currentShopItem);
 }
 
 async function createNewCart(userId, body) {
