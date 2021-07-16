@@ -124,6 +124,27 @@ router.post('/api/shop/cart/:userId', async (req, res) => {
   }
 });
 
+// remove item from cart
+router.put('/api/shop/cart/delete/:userId', async (req, res) => {
+  try {
+    // res.json({ userId: req.params.userId, cartId: req.body.cartItemId });
+
+    const userId = req.params.userId;
+    const cartIndividualId = req.body.cartItemId;
+
+    const foundCartObj = await Cart.findOne({ userId: userId }).exec();
+    const filterCart = foundCartObj.cart.filter(
+      ({ itemId }) => itemId != cartIndividualId
+    );
+    foundCartObj.cart = filterCart;
+    const finalCartObj = await foundCartObj.save();
+    res.json(finalCartObj);
+    // res.json(filterCart); //negaunu
+  } catch (err) {
+    res.json(err);
+  }
+});
+
 // helper functions
 
 async function updateShopItemStock(shopItemId, difference) {
