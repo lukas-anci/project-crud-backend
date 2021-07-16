@@ -64,13 +64,14 @@ router.put('/api/shop/cart/:userId', async (req, res) => {
     ({ _id }) => _id == cartItemId
   );
   console.log('foundCartItemToBeUpdated', foundCartItemToBeUpdated);
-  const difference = newQty - foundCartItemToBeUpdated.quantity;
+  const difference = foundCartItemToBeUpdated.quantity - newQty;
+  console.log('difference', difference);
   foundCartItemToBeUpdated.quantity = newQty;
   // autnaujinti kieki to itemo pagal newQty
 
   const saveResult = await foundCartObj.save();
 
-  // updateShopItemStock(foundCartItemToBeUpdated.itemId, difference);
+  updateShopItemStock(foundCartItemToBeUpdated.itemId, difference);
   res.json({ msg: 'atnaujinimas in progreess', saveResult });
 });
 
