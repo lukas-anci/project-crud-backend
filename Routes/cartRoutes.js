@@ -64,15 +64,14 @@ router.put('/api/shop/cart/:userId', async (req, res) => {
     ({ _id }) => _id == cartItemId
   );
   console.log('foundCartItemToBeUpdated', foundCartItemToBeUpdated);
+  const difference = newQty - foundCartItemToBeUpdated.quantity;
   foundCartItemToBeUpdated.quantity = newQty;
   // autnaujinti kieki to itemo pagal newQty
 
-  // const saveResult = await foundCartObj.save();
-  foundCartObj.save((error, saveResult) => {
-    if (error) console.log('error', error);
-    console.log('saveResult', saveResult);
-    res.json({ msg: 'atnaujinimas in progreess', saveResult });
-  });
+  const saveResult = await foundCartObj.save();
+
+  // updateShopItemStock(foundCartItemToBeUpdated.itemId, difference);
+  res.json({ msg: 'atnaujinimas in progreess', saveResult });
 });
 
 // add item to cart
@@ -96,7 +95,7 @@ router.post('/api/shop/cart/:userId', async (req, res) => {
     if (!currentCart) {
       // console.log('newcart');
       const newCart = await createNewCart(req.params.userId, req.body);
-      await updateShopItemStock(req.body._id, req.body.quantity - 1);
+      await updateShopItemStock(req.body._id, -1);
       res.json({ msg: 'created a cart', newCart: newCart });
     } else {
       // vartotojas jau turi krepseli
@@ -114,7 +113,7 @@ router.post('/api/shop/cart/:userId', async (req, res) => {
       );
       // sumazinam item quantity kuris buvo nupirktas
 
-      await updateShopItemStock(req.body._id, req.body.quantity - 1);
+      await updateShopItemStock(req.body._id, -1);
       res.json({ msg: 'add item to cart', currentCart });
     }
 
@@ -126,17 +125,17 @@ router.post('/api/shop/cart/:userId', async (req, res) => {
 
 // helper functions
 
-async function updateShopItemStock(shopItemId, newQty) {
+async function updateShopItemStock(shopItemId, difference) {
   // get how many items in stock
   // naudojam shopItem moedl, surast ir atnaujinti shopItemo kurio id yra shop item id
-  // kieki/stock i ta reiksme kuria gaunam kaip newQty
+  // kieki/stock i ta reiksme kuria gaunam kaip difference
   // const updateResult = await shopItem
   //   .findByIdAndUpdate(shopItemId, {
-  //     quantity: newQty,
+  //     quantity: difference,
   //   })
   //   .exec();
   const currentShopItem = await shopItem.findById(shopItemId);
-  currentShopItem.quantity = newQty;
+  currentShopItem.quantity = currentShopItem.quantity + difference;
   const updateResult = await currentShopItem.save();
   console.log('updateResult', updateResult);
   console.log('currentShopItem', currentShopItem);
