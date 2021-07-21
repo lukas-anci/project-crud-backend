@@ -26,6 +26,21 @@ router.get('/api/shop/items', async (req, res) => {
   }
 });
 
+// get item by category
+// find {category:catId}
+router.get('/api/shop/items/category/:catId', async (req, res) => {
+  // res.json('sending data');
+
+  try {
+    const items = await shopItem
+      .find({ category: req.params.catId })
+      .populate('category');
+    res.json(items);
+  } catch (err) {
+    res.status(500).json(err);
+  }
+});
+
 // gauti single item
 
 router.get('/api/shop/items/:id', async (req, res) => {
